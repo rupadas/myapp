@@ -1,0 +1,285 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+# This is your document metadata
+info:
+  version: "1.0.0"
+  title: My application
+  description: My application APIS created using PHP - Laravel Framework
+  
+
+basePath: /api/v1/
+tags:
+- name: seller
+  description: Everything about seller.
+- name: vehicle
+  description: Everything about vehicle.
+- name: report
+  description: Everything about report.
+# Describe your paths here
+paths:
+  /listing:
+    post:
+      tags:
+      - vehicle
+      produces:
+        - application/json
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Get All Vehicles.
+      parameters:
+      - in: body
+        name: body
+        description: Search
+        required: true
+        schema:
+          title: Search
+          type: object
+          properties:
+            type_id:
+              type: integer
+            key:
+              type: string
+            lower_range:
+              type: integer
+            higher_range:
+              type: integer
+            
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+              title: ALL Vehicles
+              type: object
+              properties:
+                status:
+                  type: integer
+                description:
+                  type: string
+                
+        default:
+          description: Unexpected error
+          schema:
+            title: Error
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string 
+
+  /listing/{id}:
+    get:
+      tags:
+      - vehicle
+      produces:
+        - application/json
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Get Individual Vehicle Details.
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of listing."
+        required: true
+        type: "string"
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+              title: Vehicle Details
+              type: object
+              properties:
+                id:
+                  type: integer
+                make:
+                  type: string
+                year:
+                  type: string
+                model:
+                  type: string
+                price:
+                  type: string
+                meta_deta:
+                  type: string
+                type:
+                  type: string
+                seller:
+                  type: object
+                images:
+                  type: array
+                  items:
+                    type: "string"
+                
+        default:
+          description: Unexpected error
+          schema:
+            title: Error
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string   
+
+  /listing/{id}/reviews:
+    get:
+      tags:
+      - vehicle
+      produces:
+        - application/json
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Get Reviews of a Vehicle
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The name that needs to be fetched. Use user1 for testing. "
+        required: true
+        type: "string"
+
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+              title: Vehicle Details Reviews
+              type: object
+              properties:
+                id:
+                  type: integer
+                make:
+                  type: string
+                year:
+                  type: string
+                model:
+                  type: string
+                price:
+                  type: string
+                meta_deta:
+                  type: string
+                type:
+                  type: string
+                seller:
+                  type: object
+                reviews:
+                  type: object
+        default:
+          description: Unexpected error
+          schema:
+            title: Error
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string   
+  
+  /sellers:
+    get:
+      tags:
+      - seller
+      produces:
+        - application/json
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Get All Sellers.
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+              title: ALL Sellers
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                website:
+                  type: string
+                address:
+                  type: string
+                type:
+                  type: string
+
+        default:
+          description: Unexpected error
+          schema:
+            title: Error
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string  
+ 
+  /seller/{id}/sendEmail:
+    post:
+      tags:
+      - seller
+      produces:
+        - application/json
+      # Describe this verb here. Note: you can use markdown
+      description: |
+        Get All Sellers.
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          title: Email
+          type: object
+          properties:
+            email:
+              type: string
+            body:
+              type: string
+            subject:
+              type: string
+            
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+              title: ALL Sellers
+              type: object
+              properties:
+                status:
+                  type: integer
+                description:
+                  type: string
+        default:
+          description: Unexpected error
+          schema:
+            title: Error
+            type: object
+            properties:
+              status:
+                type: string
+              error:
+                type: string   
+ 

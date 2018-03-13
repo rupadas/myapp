@@ -1,0 +1,20 @@
+DataModel: I used relational database MYSQl 10.1.30-MariaDB.
+
+SellerType -> SellerType fetch different type of seller exsist.
+Seller -> Seller model for fetching all seller information also it's reationship with sellerType, what type of seller it is, also  seller relationship with vehicle is defined here.
+Type -> Different types of vehicle present in the inventory.
+Vehicle -> Vehicle model for vehicle inventory also it's relationship with type, what type of vehicle it is, also it's relationship with seller to which seller does it belongs.
+Review -> Review model for review inventory also to which it vehicles it belongs, and it's corresponsing seller information.
+Image -> Image is for image inventory, also it's relationship with vehicle is defined.
+
+
+Objects:
+
+Vehicle Object is interacting with seller to get seller information.
+Vehicle Object is interacting with review to get all reviews of a vehicle.
+Vehicle Object is interacting with iamge to get images attached to a vehicle.
+Vehicle is interacting with type to get what type of vehicle it is
+
+Tech:  I used laravel (php framework) and bootstrap (css framework)
+
+Performance: Right now it is a normal serach, but indexing can be done to enhance the search.
