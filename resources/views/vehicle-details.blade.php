@@ -45,9 +45,9 @@
                         {{$value->seller->name}}
                     </div>
                     <div>
-                        <label>Reviews</label>
+                        <label>Reviews: </label>
                         @foreach($value->reviews as $review)
-                            {{$review->comment}}
+                            <div>{{$review->comment}}</div>
                         @endforeach
                     </div>
                 @endforeach
