@@ -22,7 +22,10 @@ class VehicleController extends Controller
     public function index()
     {
         try {
-            $vehicles = Vehicle::all();
+            $vehicles = Vehicle::with('type')->get();
+            foreach ($vehicles as $vehicle) {
+                $vehicle->displayImage = $vehicle->displayImage();
+            }
             return response()->json([
                 'status'=> '200', 
                 'data'=>$vehicles
@@ -65,10 +68,10 @@ class VehicleController extends Controller
     public function show($id)
     {
         try {
-            $vehicle = Vehicle::with(array('type','seller'))->where('id', $id)->get();
+            $vehicle = Vehicle::with(array('type','seller','reviews','images'))->where('id', $id)->get();
             return response()->json([
                 'status'=> '200', 
-                'data'=>$vehicle
+                'data'=> $vehicle
             ]);
         } catch(\Exception $e) {
             return response()->json(
@@ -141,8 +144,11 @@ class VehicleController extends Controller
                                         $query->orWhere('vehicles.meta_deta', 'LIKE', '%'. $q->meta_deta .'%');
                                         $query->orWhereBetween('vehicles.price', array($q->lower_range, $q->higher_range));
                                     })
-                                    ->select('vehicles.id', 'vehicles.year', 'vehicles.make', 'vehicles.model', 'type_id')
+                                    ->select('vehicles.id', 'vehicles.year', 'vehicles.make', 'vehicles.model', 'vehicles.price', 'type_id')
                                     ->get();
+                foreach ($vehicles as $vehicle) {
+                    $vehicle->displayImage = $vehicle->displayImage();
+                }
             } catch(\Exception $e) {
                 return response()->json(
                 [
@@ -162,7 +168,7 @@ class VehicleController extends Controller
     public function reviews($id)
     {
         try {
-            $vehicle = Vehicle::with(array('type','seller','reviews'))->where('id', $id)->get();
+            $vehicle = Vehicle::with(array('reviews'))->where('id', $id)->get();
             return response()->json([
                 'status'=> '200', 
                 'data'=>$vehicle
@@ -173,6 +179,36 @@ class VehicleController extends Controller
                 'status' => '400',
                 'error' => $e->getMessage(),
             ]);
+        }
+    }
+
+    public function getVehicleListView()
+    {
+        $controller = new VehicleController();
+        $vehicles = $controller->index();
+        if($vehicles->getData()->status == 200) {
+            $data = $vehicles->getData()->data;
+            return view('vehicle', ['data' => $data]);
+        }
+    }
+
+    public function getVehicleSearchListView(Request $request)
+    {
+        $controller = new VehicleController();
+        $vehicles = $controller->search($request);
+        if($vehicles->getData()->status == 200) {
+            $data = $vehicles->getData()->data;
+            return view('vehicle-search', ['data' => $data]);
+        }
+    }
+
+    public function getVehicleDetailsView($id)
+    {
+        $controller = new VehicleController();
+        $vehicles = $controller->show($id);
+        if($vehicles->getData()->status == 200) {
+            $data = $vehicles->getData()->data;
+            return view('vehicle-details', ['data' => $data]);
         }
     }
 }

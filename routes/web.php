@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/vehicles', 'VehicleController@getVehicleListView');
+Route::get('/vehicles/search', 'VehicleController@getVehicleSearchListView');
+Route::get('/vehicles/details/{id}', 'VehicleController@getVehicleDetailsView');
+

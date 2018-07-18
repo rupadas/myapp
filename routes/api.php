@@ -34,7 +34,9 @@ Route::group (
     Route::post('seller/{id}/sendEmail', 'SellerController@sendEmail')->where('id', '[0-9]+');
 
     //Get vehicles Listings
-    Route::post('listing', 'VehicleController@search');
+    Route::get('listings', 'VehicleController@index');
+
+    Route::post('listings/search', 'VehicleController@search');
 
     //Show Vehicle Details
     Route::get('listing/{id}', 'VehicleController@show')->where('id', '[0-9]+');

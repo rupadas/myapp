@@ -27,7 +27,7 @@ class SellerController extends Controller
             $sellers = Seller::with('sellerType')->get(array('id','name', 'seller_type_id'));
             return response()->json([
                 'status'=> '200', 
-                'data'=>$sellers
+                'data'=> $sellers
             ]);
         } catch(\Exception $e){
             return response()->json([
@@ -103,13 +103,12 @@ class SellerController extends Controller
         //
     }
 
-
     public function sendEmail(Request $request, $id) {
 
         $rules = [
-            'email' => 'required',
             'body' => 'required',
-            'subject' => 'required'
+            'subject' => 'required',
+            'from' => 'required'
         ]; 
         $validator = Validator::make($request->all(), $rules);
         
@@ -123,9 +122,9 @@ class SellerController extends Controller
         } else {
             $seller = Seller::find($id);
             $data = [
-                'to'   => $request->input('email'),
+                'to'   => $seller->email,
                 'name'   => $seller->name,
-                'from'   => $seller->email,  
+                'from'   => $request->input('from'),  
                 'subject' => $request->input('subject'),
                 'body'    => $request->input('body')
             ];
@@ -137,7 +136,7 @@ class SellerController extends Controller
                 return response()->json(
                 [
                     'status' => '200',
-                    'description' => "Email Sent",
+                    'message' => "Email Sent",
                 ]);
             } catch(\Exception $e) {
                 return response()->json(

@@ -3,6 +3,8 @@
 namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use App\Type;
+use App\Image;
 
 class Vehicle extends Model
 {
@@ -32,6 +34,11 @@ class Vehicle extends Model
 
     public function type() {
         return $this->belongsTo('App\Type');
+    }
+
+    public function displayImage() {
+        $image = Image::join('image_vehicle','image_vehicle.image_id','images.id')->where('image_vehicle.vehicle_id',$this->id)->select('images.*')->first();
+        return $image;
     }
 
 }

@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SellerTest extends TestCase
@@ -13,32 +12,37 @@ class SellerTest extends TestCase
      *
      * @return void
      */
-    public function testExample()
+    public function testAllSellersInfo()
     {
-         $this->json('GET', '/seller', ['name' => 'Sally'])
-             ->seeJson([
-                 'created' => true,
-             ]);
+        $response = $this->json('GET', 'api/v1/sellers');
+
+        // assert
+        $response ->assertStatus(200)
+                    ->assertJsonStructure([
+                        'status',
+                        'data' =>[
+                            '*' => [
+                                'id',
+                                'name',
+                                'seller_type_id',
+                                'seller_type'=>[
+                                    'id',
+                                    'name',
+                                    'created_at',
+                                    'updated_at'
+                                ]
+                            ]
+                        ]
+                    ]);
     }
 
-    // private $mytest;
+    public function testSellerSendEmail()
+    {
+        $response = $this->json('POST', 'api/v1/seller/1/sendEmail', ['body' => 'test', 'subject' => 'test','from' => 'test@email.com']);
 
-
-    // protected function setUp()
-    // {
-    //     $this->mytest = new MyTest();
-    // }
-
-
-    // protected function tearDown()
-    // {
-    //     $this->mytest = NULL;
-    // }
-
-
-    // public function testAdd()
-    // {
-    //     $result = $this->mytest->add(1, 3);
-    //     $this->assertEquals(4, $result);
-    // }
+        // assert
+        $response ->assertStatus(200)
+                ->assertJsonStructure(['status','message' ])
+                ->assertJson(['status' => 200, 'message' => 'Email Sent']);
+    }
 }
